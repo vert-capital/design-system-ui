@@ -1,0 +1,161 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --background-screen: 0 0% 95%;
+    --foreground: 0 0% 3.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 0 0% 93%;
+    --secondary-foreground: 0 0% 9%;
+
+    --brand: 183 100% 24%;
+    --brand-foreground: 360 100% 100%;
+    --brand-sheet: 163, 47%, 13%, 1;
+    --brand-extra-light: 185 32% 93%;
+    --brand-light: 180, 46%, 44%;
+    --brand-medium: 181, 42%, 25%;
+    --brand-dark: 181 91% 13%;
+
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 67%;
+
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 29%;
+
+    --success: 154 62% 54%;
+    /* --success: 142 71% 45%; */
+    --success-foreground: 240 5.9% 10%;
+    --success-extra-light: 134 41% 88%;
+    --success-light: 154 38% 61%;
+    --success-medium: 154 53% 43%;
+    --success-dark: 154 54% 27%;
+
+    --warning: 52 77% 58%;
+    /* --warning: 40 96% 59%; */
+    --warning-foreground: 240 5.9% 10%;
+    --warning-extra-light: 50 100% 93%;
+    --warning-light: 52 76% 67%;
+    --warning-medium: 52 55% 46%;
+    --warning-dark: 51 55% 29%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 89.8%;
+    --input: 0 0% 67%;
+    --ring: 0 0% 3.9%;
+
+    --radius: 0.5rem;
+
+    --neutral-low-pure: 180 4% 9%;
+    --neutral-low-extra-light: 0 0% 89%;
+    --neutral-low-light: 0 0% 79%;
+
+    --neutral-high-pure: 0 0% 100%;
+    --neutral-high-extra-light: 0 0% 96%;
+    --neutral-high-light: 0 0% 93%;
+    --neutral-high-medium: 0 0% 88%;
+    --neutral-high-dark: 0 0% 78%;
+
+    --helper: 7 82% 66%;
+    --helper-extra-light: 355 70% 91%;
+    --helper-light: 7 56% 66%;
+    --helper-medium: 7 47% 53%;
+    --helper-dark: 7 42% 33%;
+  }
+
+  .dark {
+    --background: 0 0% 3.9%;
+    --background-screen: 0 0% 4%;
+    --foreground: 0 0% 98%;
+
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    @apply tracking-normal;
+  }
+  html,
+  body {
+    @apply bg-background text-foreground;
+    @apply font-display antialiased;
+    @apply h-full;
+  }
+
+  a {
+    @apply focus-visible:ring-brand/20 focus-visible:ring-2 focus-visible:ring-offset-0 focus-visible:ring-offset-brand/20 focus-visible:outline-none;
+  }
+  .PopoverContent {
+    width: var(--radix-popover-trigger-width) !important;
+    max-height: var(--radix-popover-content-available-height) !important;
+  }
+}
+
+/* .popover-content-width-same-as-its-trigger {
+  width: var(--radix-popover-trigger-width - 50);
+  max-height: var(--radix-popover-content-available-height);
+} */
+
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 0;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--brand) / 0.2);
+  border-radius: 2px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--brand) / 0.5);
+}
+
+#nprogress .bar {
+  background: hsl(var(--brand) / 1);
+}
