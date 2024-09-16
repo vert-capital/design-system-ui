@@ -10,7 +10,8 @@ export interface InputProps
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, placeholder, mask, parser, ...props }, ref) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  ({ className, type, placeholder, mask, parser, value, ...props }, ref) => {
     const {
       ref: inputRef,
       maskRef,
@@ -32,6 +33,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           onInput={(event: ChangeEvent<HTMLInputElement>) => {
             if (mask) {
               props?.onChange?.({
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 target: { value: maskRef.current?.masked?.value },
               });
