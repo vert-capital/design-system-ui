@@ -10,7 +10,6 @@
   "moduleResolution": "node",
   "files": [
     "dist",
-    "dist/style.css",
     "tailwind.base.config.cjs"
   ],
   "repository": {
