@@ -1,16 +1,18 @@
-import { Calendar } from '@/components/ui/calendar';
+import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
-import { cn, dateDisplay } from '@/index';
-import { Calendar as CalendarIcon, X } from 'lucide-react';
-import { PropsWithChildren, useMemo, useState } from 'react';
+} from "@/components/ui/popover";
+import { cn, dateDisplay } from "@/index";
+import { Calendar as CalendarIcon, X } from "lucide-react";
+import { PropsWithChildren, useMemo, useState } from "react";
 
-type DateRange = {
-  from: Date;
+export type DateRange = {
+  from?: Date;
   to?: Date;
+  after?: Date;
+  before?: Date;
 };
 
 type Props = {
@@ -22,6 +24,10 @@ type Props = {
   disabled?: boolean;
   enableDays?: Date[];
   enableRange?: DateRange;
+  className?: string;
+  classNameContent?: string;
+  placeholder?: string;
+  align?: "left" | "center";
   onChange?: (value: any) => void;
   [key: string]: any;
 };
@@ -35,15 +41,14 @@ export function DatePicker({
   enableDays,
   enableRange,
   disabled,
+  className,
+  classNameContent,
+  placeholder,
+  align = "left",
   onChange,
   ...props
 }: PropsWithChildren<Props>) {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-
-  const disabledDate = [
-    ...disabledDays,
-    { from: disabledRange?.from, to: disabledRange?.to },
-  ];
 
   const getSelectedDate = (date?: any) => {
     if (!date) return undefined;
@@ -67,38 +72,67 @@ export function DatePicker({
     return newDate;
   };
 
-  const isDateAvailable = (date: Date, dateSet: Set<string>): boolean => {
-    return dateSet.has(date.toDateString());
-  };
+  const disabledDate = useMemo(() => {
+    const set = new Set<string>();
+    disabledDays.forEach((day) => set.add(day.toDateString()));
 
-  const enableDates = {
-    disabled: (date: Date) =>
-      enableDays || enableRange
-        ? !isDateAvailable(date, availableDateSet)
-        : false,
-  };
+    if (disabledRange?.from && disabledRange?.to) {
+      const currentDate = new Date(disabledRange.from);
+      while (currentDate <= new Date(disabledRange.to!)) {
+        set.add(currentDate.toDateString());
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+    }
+
+    return set;
+  }, [disabledDays, disabledRange]);
 
   const availableDateSet = useMemo(() => {
     const set = new Set<string>();
-    if (enableDays && enableDays.length > 0) {
+    if (enableDays) {
       enableDays.forEach((dayStr) => {
         const day = new Date(dayStr);
         set.add(day.toDateString());
       });
     }
-    if (enableRange) {
+
+    if (enableRange?.from) {
       const currentDate = new Date(enableRange.from);
-      if (enableRange.to) {
-        while (currentDate <= new Date(enableRange.to)) {
-          set.add(currentDate.toDateString());
-          currentDate.setDate(currentDate.getDate() + 1);
-        }
-      } else {
+      while (enableRange.to && currentDate <= new Date(enableRange.to)) {
         set.add(currentDate.toDateString());
+        currentDate.setDate(currentDate.getDate() + 1);
       }
     }
+
     return set;
   }, [enableDays, enableRange]);
+
+  const isDisabled = (date: Date) => {
+    const dateString = date.toDateString();
+
+    // Enable dates should override disabled dates
+    if (availableDateSet.size > 0) {
+      return !availableDateSet.has(dateString); // If it's not an enabled date, disable it
+    }
+
+    // If the date is not in the enabled list and is in the disabled list, disable it
+    return disabledDate.has(dateString);
+  };
+
+  const ContentButton = () => {
+    return (
+      <>
+        <CalendarIcon className="ds-calendar-icon-vert mr-1.5 h-4 w-4" />
+        {field?.value ? (
+          dateDisplay(field?.value)
+        ) : (
+          <span className="ds-calendar-placeholder-vert">
+            {placeholder || "dd/mm/aaaa"}
+          </span>
+        )}
+      </>
+    );
+  };
 
   return (
     <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen} {...props}>
@@ -106,32 +140,40 @@ export function DatePicker({
         <button
           disabled={disabled}
           className={cn(
-            'w-full justify-between text-left font-normal flex items-center py-2 pr-0 pl-2 border border-input border-solid rounded text-neutral-400 text-sm h-10',
-            !field?.value && 'text-muted-foreground',
+            "flex h-10 w-full items-center justify-between truncate rounded border border-solid border-input py-2 pl-2 pr-0 text-left text-sm font-normal text-neutral-400",
+            !field?.value && "text-muted-foreground",
             {
-              'opacity-50 bg-neutral_high-light cursor-not-allowed': disabled,
+              "cursor-not-allowed bg-neutral_high-light opacity-50": disabled,
             },
+            className,
           )}
         >
-          <CalendarIcon className="h-4 w-4 mr-1.5" />
-          {field?.value ? dateDisplay(field?.value) : <span>dd/mm/aaaa</span>}
+          {align === "center" ? (
+            <ContentButton />
+          ) : (
+            <div className="flex items-center justify-start">
+              <ContentButton />
+            </div>
+          )}
+
           {field?.value && !disabledClear ? (
             <div
               title="Limpar"
-              className="flex flex-col justify-center items-center p-1 mt-0.5 mx-1.5 rounded-full hover:bg-muted cursor-pointer"
+              className="ds-calendar-close-vert mx-1.5 mt-0.5 flex cursor-pointer flex-col items-center justify-center rounded-full p-1 hover:bg-muted"
               onClick={(e: any) => {
                 e.stopPropagation();
                 field?.onChange(undefined);
+                if (onChange) onChange(undefined);
               }}
             >
               <X className="h-4 w-4 stroke-muted-foreground" />
             </div>
           ) : (
-            <div className={cn(disabledClear ? 'w-4' : 'w-9')}></div>
+            <div className={cn(disabledClear ? "w-4" : "w-9")}></div>
           )}
         </button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0">
+      <PopoverContent className={cn("w-auto p-0", classNameContent)}>
         <Calendar
           mode="single"
           selected={getSelectedDate(field?.value)}
@@ -141,10 +183,20 @@ export function DatePicker({
             if (closeAfterSelect) setIsCalendarOpen(false);
           }}
           defaultMonth={monthFocus(field?.value)}
-          disabled={disabledDate}
+          disabled={
+            disabledRange?.after
+              ? {
+                  after: disabledRange.after,
+                }
+              : disabledRange?.before
+                ? {
+                    before: disabledRange.before,
+                  }
+                : isDisabled
+          }
           initialFocus
           onMonthChange={props?.onMonthChange}
-          modifiers={enableDates}
+          className="ds-calendar-vert"
         />
       </PopoverContent>
     </Popover>
