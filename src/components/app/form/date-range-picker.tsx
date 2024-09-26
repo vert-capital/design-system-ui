@@ -22,6 +22,8 @@ export interface DateRangePickerProps {
   disabled?: boolean;
   className?: string;
   disabledClear?: boolean;
+  bookedDates?: Date[];
+  bookedText?: string;
   onSelected?: (value: { from?: Date; to?: Date } | undefined) => void;
 }
 
@@ -40,6 +42,8 @@ export function DateRangePicker({
   disabled,
   className,
   disabledClear,
+  bookedDates,
+  bookedText,
   onSelected,
   ...props
 }: DateRangePickerProps) {
@@ -256,6 +260,10 @@ export function DateRangePicker({
             }}
             selected={getSelectedRangeDate(field?.value)}
             defaultMonth={monthFocus(field?.value?.from)}
+            modifiers={{
+              booked: bookedDates?.length ? bookedDates : [],
+            }}
+            bookedText={bookedText}
           />
           <div className="flex w-full items-center justify-between pb-2 pl-2 pr-2">
             <Button

@@ -27,7 +27,10 @@ type Props = {
   className?: string;
   classNameContent?: string;
   placeholder?: string;
-  align?: "left" | "center";
+  alignText?: "left" | "center";
+  align?: "start" | "center" | "end";
+  bookedDates?: Date[];
+  bookedText?: string;
   onChange?: (value: any) => void;
   [key: string]: any;
 };
@@ -44,7 +47,10 @@ export function DatePicker({
   className,
   classNameContent,
   placeholder,
-  align = "left",
+  alignText = "left",
+  align = "end",
+  bookedDates,
+  bookedText,
   onChange,
   ...props
 }: PropsWithChildren<Props>) {
@@ -148,7 +154,7 @@ export function DatePicker({
             className,
           )}
         >
-          {align === "center" ? (
+          {alignText === "center" ? (
             <ContentButton />
           ) : (
             <div className="flex items-center justify-start">
@@ -173,7 +179,10 @@ export function DatePicker({
           )}
         </button>
       </PopoverTrigger>
-      <PopoverContent className={cn("w-auto p-0", classNameContent)}>
+      <PopoverContent
+        align={align}
+        className={cn("w-auto p-0", classNameContent)}
+      >
         <Calendar
           mode="single"
           selected={getSelectedDate(field?.value)}
@@ -197,6 +206,10 @@ export function DatePicker({
           initialFocus
           onMonthChange={props?.onMonthChange}
           className="ds-calendar-vert"
+          modifiers={{
+            booked: bookedDates?.length ? bookedDates : [],
+          }}
+          bookedText={bookedText}
         />
       </PopoverContent>
     </Popover>
