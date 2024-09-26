@@ -7,7 +7,7 @@ import {
 } from "@/index";
 import { cn } from "@/lib/utils";
 import ptBR from "date-fns/locale/pt-BR";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import * as React from "react";
 import { CaptionLabelProps, DayPicker, useNavigation } from "react-day-picker";
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
@@ -120,12 +120,13 @@ function CaptionLabel({ prop }: { prop: CaptionLabelProps }) {
     <div className="flex items-center justify-center">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <div className="cursor-pointer rounded-md px-1.5 text-sm hover:bg-brand/10">
+          <div className="flex cursor-pointer items-center justify-center rounded-md px-1.5 text-sm hover:bg-brand/10">
             {
               [...months].find(
                 (m) => m.value === new Date(prop.displayMonth).getMonth(),
               )?.label
             }
+            <ChevronDown className="ml-1 h-3 w-3" />
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
@@ -153,14 +154,13 @@ function CaptionLabel({ prop }: { prop: CaptionLabelProps }) {
           </div>
         </DropdownMenuContent>
       </DropdownMenu>
-
-      <div>/</div>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <div className="cursor-pointer rounded-md px-1.5 text-sm hover:bg-brand/10">
+          <div className="flex cursor-pointer items-center justify-center rounded-md px-1.5 text-sm hover:bg-brand/10">
             {[...generateYears()].find(
               (m) => m === new Date(prop.displayMonth).getFullYear(),
             )}
+            <ChevronDown className="ml-1 h-3 w-3" />
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
