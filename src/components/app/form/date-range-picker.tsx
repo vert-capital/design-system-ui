@@ -59,7 +59,8 @@ export function DateRangePicker({
 
   useEffect(() => {
     if (onOpenChange) onOpenChange(isOpen);
-  }, [isOpen, onOpenChange]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
 
   // Criar conjunto de datas desabilitadas
   const disabledDate = useMemo(() => {

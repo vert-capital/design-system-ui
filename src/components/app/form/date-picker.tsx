@@ -60,7 +60,8 @@ export function DatePicker({
 
   useEffect(() => {
     if (onOpenChange) onOpenChange(isCalendarOpen);
-  }, [isCalendarOpen, onOpenChange]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isCalendarOpen]);
 
   const getSelectedDate = (date?: any) => {
     if (!date) return undefined;
