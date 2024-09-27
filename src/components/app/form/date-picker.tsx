@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/popover";
 import { cn, dateDisplay } from "@/index";
 import { Calendar as CalendarIcon, X } from "lucide-react";
-import { PropsWithChildren, useMemo, useState } from "react";
+import { PropsWithChildren, useEffect, useMemo, useState } from "react";
 
 export type DateRange = {
   from?: Date;
@@ -32,6 +32,7 @@ type Props = {
   bookedDates?: Date[];
   bookedText?: string;
   onChange?: (value: any) => void;
+  onOpenChange?: (value: boolean) => void;
   [key: string]: any;
 };
 
@@ -52,9 +53,14 @@ export function DatePicker({
   bookedDates,
   bookedText,
   onChange,
+  onOpenChange,
   ...props
 }: PropsWithChildren<Props>) {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+
+  useEffect(() => {
+    if (onOpenChange) onOpenChange(isCalendarOpen);
+  }, [isCalendarOpen, onOpenChange]);
 
   const getSelectedDate = (date?: any) => {
     if (!date) return undefined;

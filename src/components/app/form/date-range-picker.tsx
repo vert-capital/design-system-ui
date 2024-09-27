@@ -2,7 +2,7 @@ import { Button, DateRange } from "@/components";
 import { cn, dateDisplay } from "@/index";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { CalendarIcon, X } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Calendar } from "../../ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
 
@@ -25,6 +25,7 @@ export interface DateRangePickerProps {
   bookedDates?: Date[];
   bookedText?: string;
   onSelected?: (value: { from?: Date; to?: Date } | undefined) => void;
+  onOpenChange?: (value: boolean) => void;
 }
 
 export function DateRangePicker({
@@ -45,6 +46,7 @@ export function DateRangePicker({
   bookedDates,
   bookedText,
   onSelected,
+  onOpenChange,
   ...props
 }: DateRangePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -54,6 +56,10 @@ export function DateRangePicker({
   const [dynamicLimitAfter, setDynamicLimitAfter] = useState<Date | undefined>(
     undefined,
   );
+
+  useEffect(() => {
+    if (onOpenChange) onOpenChange(isOpen);
+  }, [isOpen, onOpenChange]);
 
   // Criar conjunto de datas desabilitadas
   const disabledDate = useMemo(() => {

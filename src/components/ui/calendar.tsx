@@ -102,9 +102,9 @@ function Calendar({
           ),
           day_range_end: "day-range-end aria-selected:text-slate-50",
           day_selected:
-            "day-selected-only bg-brand [&:has(.is-booked)]:border-2 [&:has(.is-booked)]:border-black !text-slate-50 hover:!bg-brand/50 hover:!text-primary-foreground focus:bg-brand focus:text-primary-foreground",
+            "day-selected-only bg-brand !text-slate-50 hover:!bg-brand/50 hover:!text-primary-foreground focus:bg-brand focus:text-primary-foreground",
           day_outside:
-            "day-outside text-muted-foreground opacity-50 aria-selected:text-muted-foreground aria-selected:opacity-30 hover:text-brand",
+            "day-outside text-muted-foreground opacity-50 [&:has(.content-tooltip-ds)]:!opacity-100  aria-selected:text-muted-foreground aria-selected:opacity-30 hover:text-brand",
           day_disabled: "text-muted-foreground opacity-50",
           day_range_middle:
             "day-range-middle aria-selected:!bg-accent aria-selected:!text-accent-foreground",
@@ -130,11 +130,14 @@ function Calendar({
               <Tooltip delayDuration={200}>
                 <TooltipTrigger asChild>
                   <span
-                    className={cn("rounded-full p-2", {
-                      "border-2 border-dashed border-white px-1.5 py-1":
-                        props.activeModifiers["booked"] &&
-                        props.activeModifiers.selected,
-                    })}
+                    className={cn(
+                      "flex h-[1.78rem] w-[1.78rem] items-center justify-center rounded-full pr-[0.1rem]",
+                      {
+                        "border-2 border-dashed border-white":
+                          props.activeModifiers["booked"] &&
+                          props.activeModifiers.selected,
+                      },
+                    )}
                   >
                     {props.date.getDate()}
                   </span>
@@ -143,7 +146,7 @@ function Calendar({
                 props.activeModifiers.today ? (
                   <TooltipContent
                     className={cn("w-auto", {
-                      "border-brand bg-brand text-white":
+                      "content-tooltip-ds border-brand bg-brand text-white":
                         props.activeModifiers["booked"] ||
                         props.activeModifiers.today,
                     })}
